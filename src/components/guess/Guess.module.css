@@ -1,0 +1,29 @@
+.letter {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid lightgray;
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.true {
+  background-color: greenyellow;
+  transition: ease-in 1s;
+}
+.exists {
+  background-color: yellow;
+  transition: ease-in 0.5s;
+}
+.false {
+  background-color: rgb(162, 159, 159);
+  transition: ease-in 0.5s;
+}

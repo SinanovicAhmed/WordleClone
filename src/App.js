@@ -1,23 +1,79 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState, useEffect } from "react";
+import Guess from "./components/guess/Guess.js";
+import styles from "./App.module.css";
 function App() {
+  const [guesses, setGuesses] = useState(["", "", "", "", "", ""]);
+  const [guessWord, setGuessWord] = useState("rhino");
+  const [guessNumber, setGuessNumber] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
+  const fetchWord = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "5188ad3201mshe057d86d827e423p1656ecjsn46745597aac0",
+        "X-RapidAPI-Host": "random-words5.p.rapidapi.com",
+      },
+    };
+    const response = await fetch(
+      "https://random-words5.p.rapidapi.com/getMultipleRandom?count=5",
+      options
+    );
+    const word = await response.json();
+    console.log(word);
+  };
+  useEffect(() => {
+    if (guessNumber === 6) {
+      setGameFinished(true);
+    }
+  }, [guessNumber]);
+  let wordLength = 0;
+  let guessNm = guessNumber;
+  const changeGameState = () => {
+    setGameFinished(true);
+  };
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (wordLength < 5) {
+        if (e.keyCode >= 65 && e.keyCode <= 90) {
+          setGuesses((prev) =>
+            prev.map((el, i) => (i !== guessNm ? el : el + e.key))
+          );
+          wordLength++;
+        }
+      }
+      if (e.key === "Backspace" && wordLength > 0) {
+        setGuesses((prev) =>
+          prev.map((el, i) => (i !== guessNm ? el : el.slice(0, -1)))
+        );
+        wordLength--;
+      }
+      if (e.key === "Enter" && wordLength === 5) {
+        if (guessNm < 6) {
+          guessNm++;
+          setGuessNumber(guessNm);
+        }
+        wordLength = 0;
+      }
+    };
+    document.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.container}>
+      {guesses.map((el, i) => (
+        <Guess
+          word={guesses[i]}
+          guessWord={guessWord}
+          changeGameState={changeGameState}
+        />
+      ))}
+
+      {gameFinished ? (
+        <h2 className={styles.finishMsg}>
+          Correct word is {guessWord.toUpperCase()}!
+        </h2>
+      ) : null}
     </div>
   );
 }
