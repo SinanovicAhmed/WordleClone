@@ -1,5 +1,6 @@
 import styles from "./Guess.module.css";
 import { useEffect, useState } from "react";
+import { words } from "../words/words";
 const Guess = (props) => {
   const word = props.word;
   const guessWord = props.guessWord;
@@ -22,12 +23,7 @@ const Guess = (props) => {
 
   useEffect(() => {
     const styleListener = (e) => {
-      if (e.key === "Enter") {
-        styleFunction();
-        if (guessWord === word) {
-          props.changeGameState();
-        }
-      }
+      if (e.key === "Enter" && words.includes(word)) styleFunction();
     };
     window.addEventListener("keydown", styleListener);
     return () => window.removeEventListener("keydown", styleListener);

@@ -24,54 +24,45 @@ function App() {
     const word = await response.json();
     */
   };
-  const changeGameState = () => {
-    setGameFinished(true);
-  };
 
-  let wordLength = 0;
-  let guessNm = guessNumber;
+  useEffect(() => {
+    fetchWord();
+  }, []);
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (wordLength < 5) {
+      if (guesses[guessNumber].length < 5) {
         if (e.keyCode >= 65 && e.keyCode <= 90) {
           setGuesses((prev) =>
-            prev.map((el, i) => (i !== guessNm ? el : el + e.key))
+            prev.map((el, i) => (i !== guessNumber ? el : el + e.key))
           );
-          wordLength++;
         }
       }
-      if (e.key === "Backspace" && wordLength > 0) {
+      if (e.key === "Backspace" && guesses[guessNumber].length > 0) {
         setGuesses((prev) =>
-          prev.map((el, i) => (i !== guessNm ? el : el.slice(0, -1)))
+          prev.map((el, i) => (i !== guessNumber ? el : el.slice(0, -1)))
         );
-        wordLength--;
       }
-      if (e.key === "Enter" && wordLength === 5) {
-        if (guessNm < 6) {
-          guessNm++;
-          setGuessNumber(guessNm);
+      if (e.key === "Enter") {
+        if (guesses[guessNumber].length === 5) {
+          console.log(guesses[guessNumber]);
+          if (words.includes(guesses[guessNumber])) {
+            setGuessNumber((prev) => prev + 1);
+          } else {
+            console.log("Wrong word");
+          }
         }
-        wordLength = 0;
+        if (guessNumber === 5 || guesses[guessNumber] === guessWord)
+          setGameFinished(true);
       }
     };
     document.addEventListener("keydown", handleKeyPress);
-    fetchWord();
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
-  useEffect(() => {
-    if (guessNumber === 6) {
-      setGameFinished(true);
-    }
-  }, [guessNumber]);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [guesses, guessNumber]);
 
   return (
     <div className={styles.container}>
       {guesses.map((el, i) => (
-        <Guess
-          word={guesses[i]}
-          guessWord={guessWord}
-          changeGameState={changeGameState}
-        />
+        <Guess word={guesses[i]} guessWord={guessWord} />
       ))}
 
       {gameFinished ? (
