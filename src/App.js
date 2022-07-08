@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import Guess from "./components/guess/Guess.js";
 import styles from "./App.module.css";
+import { words } from "./components/words/words";
 function App() {
   const [guesses, setGuesses] = useState(["", "", "", "", "", ""]);
   const [guessWord, setGuessWord] = useState("rhino");
   const [guessNumber, setGuessNumber] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const fetchWord = async () => {
-    const options = {
+    const randomIndex = Math.floor(Math.random() * words.length);
+    setGuessWord(words[randomIndex]);
+    /*const options = {
       method: "GET",
       headers: {
         "X-RapidAPI-Key": "5188ad3201mshe057d86d827e423p1656ecjsn46745597aac0",
@@ -19,18 +22,14 @@ function App() {
       options
     );
     const word = await response.json();
-    console.log(word);
+    */
   };
-  useEffect(() => {
-    if (guessNumber === 6) {
-      setGameFinished(true);
-    }
-  }, [guessNumber]);
-  let wordLength = 0;
-  let guessNm = guessNumber;
   const changeGameState = () => {
     setGameFinished(true);
   };
+
+  let wordLength = 0;
+  let guessNm = guessNumber;
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (wordLength < 5) {
@@ -56,8 +55,14 @@ function App() {
       }
     };
     document.addEventListener("keydown", handleKeyPress);
+    fetchWord();
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
+  useEffect(() => {
+    if (guessNumber === 6) {
+      setGameFinished(true);
+    }
+  }, [guessNumber]);
 
   return (
     <div className={styles.container}>
