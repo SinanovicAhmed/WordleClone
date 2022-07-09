@@ -7,6 +7,7 @@ function App() {
   const [guessWord, setGuessWord] = useState("rhino");
   const [guessNumber, setGuessNumber] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
+  const [animationState, setAnimationState] = useState(false);
   const fetchWord = async () => {
     const randomIndex = Math.floor(Math.random() * words.length);
     setGuessWord(words[randomIndex]);
@@ -44,14 +45,19 @@ function App() {
       }
       if (e.key === "Enter") {
         if (guesses[guessNumber].length === 5) {
-          console.log(guesses[guessNumber]);
           if (words.includes(guesses[guessNumber])) {
             setGuessNumber((prev) => prev + 1);
           } else {
-            console.log("Wrong word");
+            setAnimationState(true);
+            setTimeout(() => {
+              setAnimationState(false);
+            }, 200);
           }
         }
-        if (guessNumber === 5 || guesses[guessNumber] === guessWord)
+        if (
+          (guessNumber === 5 || guesses[guessNumber] === guessWord) &&
+          words.includes(guesses[guessNumber])
+        )
           setGameFinished(true);
       }
     };
@@ -60,7 +66,13 @@ function App() {
   }, [guesses, guessNumber]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={
+        !animationState
+          ? `${styles.container}`
+          : `${styles.container} ${styles.animation}`
+      }
+    >
       {guesses.map((el, i) => (
         <Guess word={guesses[i]} guessWord={guessWord} />
       ))}
