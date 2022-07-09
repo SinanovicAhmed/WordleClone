@@ -20,7 +20,9 @@ const Guess = (props) => {
       setStyleState(style);
     }
   };
-
+  useEffect(() => {
+    setStyleState([null, null, null, null, null]);
+  }, [props.guessWord]);
   useEffect(() => {
     const styleListener = (e) => {
       if (e.key === "Enter" && words.includes(word)) styleFunction();

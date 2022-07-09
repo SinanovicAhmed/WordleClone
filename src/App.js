@@ -64,7 +64,12 @@ function App() {
     document.addEventListener("keydown", handleKeyPress);
     return () => document.removeEventListener("keydown", handleKeyPress);
   }, [guesses, guessNumber]);
-
+  const resetGame = () => {
+    setGuesses(["", "", "", "", "", ""]);
+    setGuessNumber(0);
+    setGameFinished(false);
+    fetchWord();
+  };
   return (
     <div
       className={
@@ -82,6 +87,15 @@ function App() {
           Correct word is {guessWord.toUpperCase()}!
         </h2>
       ) : null}
+      {guessNumber !== 0 ? (
+        <button className={styles.new_game_btn} onClick={resetGame}>
+          New Game
+        </button>
+      ) : (
+        <button className={styles.new_game_btn} disabled>
+          New Game
+        </button>
+      )}
     </div>
   );
 }
