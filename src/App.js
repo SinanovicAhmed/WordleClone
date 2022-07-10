@@ -71,6 +71,7 @@ function App() {
     setGuesses(["", "", "", "", "", ""]);
     setGuessNumber(0);
     setGameFinished(false);
+    setUnusedLetters(alphabet);
     fetchWord();
   };
 
