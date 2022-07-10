@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import Guess from "./components/guess/Guess.js";
 import styles from "./App.module.css";
 import { words } from "./components/words/words";
+import UnusedLetters from "./components/UnusedLetters/UnusedLetters.js";
+import { alphabet } from "./components/UnusedLetters/alphabet";
 function App() {
   const [guesses, setGuesses] = useState(["", "", "", "", "", ""]);
-  const [guessWord, setGuessWord] = useState("rhino");
+  const [guessWord, setGuessWord] = useState("");
   const [guessNumber, setGuessNumber] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const [animationState, setAnimationState] = useState(false);
+  const [unusedLetters, setUnusedLetters] = useState(alphabet);
   const fetchWord = async () => {
     const randomIndex = Math.floor(Math.random() * words.length);
     setGuessWord(words[randomIndex]);
@@ -70,6 +73,13 @@ function App() {
     setGameFinished(false);
     fetchWord();
   };
+
+  const removeLetter = (letters) => {
+    //deleting letters from state that match correctly guessed letters from guess component
+    setUnusedLetters(
+      unusedLetters.filter((element) => !letters.includes(element))
+    );
+  };
   return (
     <div
       className={
@@ -79,7 +89,11 @@ function App() {
       }
     >
       {guesses.map((el, i) => (
-        <Guess word={guesses[i]} guessWord={guessWord} />
+        <Guess
+          word={guesses[i]}
+          guessWord={guessWord}
+          removeLetter={removeLetter}
+        />
       ))}
 
       {gameFinished ? (
@@ -96,6 +110,7 @@ function App() {
           New Game
         </button>
       )}
+      <UnusedLetters unusedLetters={unusedLetters} />
     </div>
   );
 }

@@ -8,15 +8,19 @@ const Guess = (props) => {
   const styleFunction = () => {
     let style = [null, null, null, null, null];
     if (word.length === 5) {
+      let corectLetters = [];
       for (let i = 0; i < 5; i++) {
         if (word[i] === guessWord[i]) {
           style[i] = styles.true;
+          corectLetters.push(word[i].toUpperCase());
         } else if (guessWord.includes(word[i])) {
           style[i] = styles.exists;
+          corectLetters.push(word[i].toUpperCase());
         } else {
           style[i] = styles.false;
         }
       }
+      props.removeLetter(corectLetters);
       setStyleState(style);
     }
   };

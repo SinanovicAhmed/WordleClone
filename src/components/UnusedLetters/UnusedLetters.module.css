@@ -1,0 +1,18 @@
+.container {
+  width: 80%;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 150px;
+}
+.letter {
+  width: 40px;
+  height: 40px;
+  margin: 3px;
+  border: 2px solid rgb(206, 204, 204);
+  background-color: rgb(206, 204, 204);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
