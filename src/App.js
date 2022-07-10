@@ -90,6 +90,7 @@ function App() {
     >
       {guesses.map((el, i) => (
         <Guess
+          key={i}
           word={guesses[i]}
           guessWord={guessWord}
           removeLetter={removeLetter}
