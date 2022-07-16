@@ -1,3 +1,7 @@
+Website: https://wordleclonee.netlify.app/ </br>
+Made for desktop use only, and watch out for caps lock :D
+
+_____________________________________________________________________________________________________________________
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
